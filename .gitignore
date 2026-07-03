@@ -1,0 +1,21 @@
+# Local tests and docs (ignored per user request)
+docs_and_tests_local/
+*.md
+
+# Node / Client
+client/node_modules/
+client/dist/
+client/.DS_Store
+client/coverage/
+
+# Python / Server
+server/venv/
+server/__pycache__/
+server/*.py[cod]
+server/*$py.class
+server/.env
+server/db.sqlite3
+
+# OS
+.DS_Store
+Thumbs.db
