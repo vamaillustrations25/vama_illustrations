@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { contactApi, authApi, galleryApi, type ContactEnquiry, type Gallery } from '../lib/api';
 import { useAuth } from '../context/AuthContext';
+import { useTheme } from '../context/ThemeContext';
+import { supabase } from '../lib/supabase';
 import { CustomSelect } from '../components/CustomSelect';
 
 // ── Constants ─────────────────────────────────────────────────────────────────
