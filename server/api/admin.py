@@ -13,9 +13,9 @@ class GalleryAdmin(admin.ModelAdmin):
 
 @admin.register(ContactEnquiry)
 class ContactEnquiryAdmin(admin.ModelAdmin):
-    list_display = ("name", "email", "event_type", "status", "created_at")
-    list_filter = ("status",)
-    search_fields = ("name", "email", "message")
+    list_display = ("name", "email", "services_required", "status", "created_at")
+    list_filter = ("status", "services_required", "created_at")
+    search_fields = ("name", "email", "services_required", "message")
     list_editable = ("status",)
     readonly_fields = ("created_at",)
     ordering = ("-created_at",)

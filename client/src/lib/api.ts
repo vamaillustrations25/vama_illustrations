@@ -22,8 +22,8 @@ export interface Gallery {
 export interface ContactPayload {
   name: string;
   email: string;
-  phone?: string;
-  event_type?: string;
+  phone: string;
+  services_required: string;
   message: string;
 }
 
@@ -32,7 +32,7 @@ export interface ContactEnquiry {
   name: string;
   email: string;
   phone: string;
-  event_type: string;
+  services_required: string;
   message: string;
   status: string;
   created_at: string;
@@ -116,14 +116,14 @@ export const contactApi = {
   list: () => request<ContactEnquiry[]>('/contact/'),
 
   /** Send email to an enquirer via SMTP (admin use) */
-  sendEmail: (payload: { name: string; email: string; event_type?: string }) =>
+  sendEmail: (payload: { name: string; email: string; services_required?: string }) =>
     request<{ detail: string }>('/send-email/', {
       method: 'POST',
       body: JSON.stringify(payload),
     }),
 
   /** Get rendered WhatsApp template (admin use) */
-  getWhatsAppTemplate: (payload: { name: string; event_type?: string }) =>
+  getWhatsAppTemplate: (payload: { name: string; services_required?: string }) =>
     request<{ template: string }>('/whatsapp-template/', {
       method: 'POST',
       body: JSON.stringify(payload),

@@ -1,6 +1,7 @@
 import { BrowserRouter as Router, Navigate, Route, Routes } from 'react-router-dom';
 import ScrollToTop from './components/ScrollToTop';
 import Layout from './components/Layout';
+import WhatsAppFloat from './components/WhatsAppFloat';
 import Home from './pages/Home';
 import Collections from './pages/Collections';
 import Cart from './pages/Cart';
@@ -44,6 +45,7 @@ const AppContent = () => {
                   <Route path="*" element={<Navigate to="/" replace />} />
                 </Routes>
               </Layout>
+              <WhatsAppFloat />
             </div>
           }
         />

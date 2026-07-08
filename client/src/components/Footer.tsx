@@ -2,14 +2,13 @@ const Footer = () => {
   return (
     <footer className="border-t border-[#4b1e12]/10 bg-[#2a120c] text-[#fff4df]">
       <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
           <div>
             <h3 className="mb-4 font-serif text-2xl font-semibold text-[#f7d18a]">
               Vama Illustrations
             </h3>
             <p className="text-sm leading-relaxed text-[#f5dec2]">
-              Cinematic wedding stories, invitation art, and visual rituals for
-              celebrations that feel royal, intimate, and alive.
+              From the first invitation to the final keepsake, every element belongs together.
             </p>
           </div>
           <div>
@@ -43,29 +42,38 @@ const Footer = () => {
             </ul>
           </div>
           <div>
-            <h4 className="mb-3 text-sm font-semibold uppercase tracking-[0.25em] text-[#f7d18a]">
-              Rituals
-            </h4>
-            <ul className="space-y-2 text-[#f5dec2]">
-              <li>Haldi and Mehendi</li>
-              <li>Sangeet Films</li>
-              <li>Phera Photography</li>
-              <li>Bespoke Invitations</li>
-            </ul>
-          </div>
-          <div>
-            <h4 className="mb-3 text-sm font-semibold uppercase tracking-[0.25em] text-[#f7d18a]">
+            <h4 className="mb-4 text-sm font-semibold uppercase tracking-[0.25em] text-[#f7d18a]">
               Contact
             </h4>
-            <p className="text-[#f5dec2]">Mumbai, India</p>
-            <p className="text-[#f5dec2]">+91 7506464033</p>
-            <p className="text-[#f5dec2]">vamaillustrations@gmail.com</p>
+            <div className="space-y-4">
+              <div className="flex items-start gap-3 text-[#f5dec2]">
+                <svg className="mt-1 h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.243-4.243a8 8 0 1111.314 0z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                </svg>
+                <span>Mumbai, India</span>
+              </div>
+
+              <a href="https://wa.me/917506464033?text=Hi%20Vama%20Illustration%2C%20I%20would%20like%20to%20enquire%20more%20about%20your%20services" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 text-[#f5dec2] transition-colors hover:text-white">
+                <svg className="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                </svg>
+                <span>+91 7506464033</span>
+              </a>
+
+              <a href="mailto:vamaillustrations@gmail.com?subject=Enquiry&body=Hi%20Vama%20Illustration%2C%20I%20would%20like%20to%20enquire%20more%20about%20your%20services" className="flex items-center gap-3 text-[#f5dec2] transition-colors hover:text-white break-all">
+                <svg className="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                </svg>
+                <span>vamaillustrations@gmail.com</span>
+              </a>
+            </div>
           </div>
         </div>
         <div className="mt-10 flex flex-col items-center justify-between gap-6 border-t border-[#f7d18a]/20 pt-8 sm:flex-row">
           <div className="text-center text-sm text-[#f5dec2] sm:text-left">
-            © {new Date().getFullYear()} Vama Illustrations. Made for celebrations
-            with soul ♡
+            © {new Date().getFullYear()} Vama Illustrations. Made for your celebrations
+            with love ♡
           </div>
           <div className="flex gap-4">
             <a href="https://www.instagram.com/vamaillustrations?igsh=MTFudHR1ZWZqdGRwaA%3D%3D&utm_source=qr" className="text-[#f5dec2] transition-colors hover:text-[#f7d18a]" aria-label="Instagram">

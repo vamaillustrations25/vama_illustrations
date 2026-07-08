@@ -22,7 +22,7 @@ const rituals = [
   },
 ];
 
-const services = ['Photography', 'Films', 'Invites', 'Stationery', 'Reels', 'Albums'];
+const services = ['Invites', 'Stationery', 'Social Media', 'Branding', 'Illustrations', 'Website', 'Wedding Wardrobe', 'Wedding Logo'];
 
 const Home = () => {
   return (
@@ -58,7 +58,7 @@ const Home = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
           >
-            Mumbai / Destination
+            Luxury Wedding Hub
           </motion.p>
 
           <motion.h1
@@ -67,7 +67,7 @@ const Home = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, delay: 0.35, ease: [0.16, 1, 0.3, 1] }}
           >
-            Indian weddings told like moving paintings.
+            A Wedding brand built around “Your Story”.
           </motion.h1>
 
           <motion.div
@@ -77,24 +77,44 @@ const Home = () => {
             transition={{ duration: 0.9, delay: 0.65 }}
           >
             <p className="text-lg leading-relaxed">
-              Vama builds photography, wedding films, animated invitations, and keepsake design systems for
-              celebrations drenched in color, ritual, family, and drama.
+              We craft be-spoke Wedding identities through E-Invitations, Stationery,Illustrations and thoughtful Designs that's beautifully and uniquely 'Yours'.
             </p>
             <Link
               to="/collections"
-              className="group inline-flex w-fit items-center gap-3 rounded-full bg-[#f7d18a] px-6 py-3 text-sm font-bold uppercase tracking-[0.16em] text-[#381a12] shadow-2xl shadow-black/30 transition-all duration-300 hover:-translate-y-1 hover:bg-white"
+              className="group relative inline-flex w-fit items-center gap-3 overflow-hidden rounded-full bg-[#f7d18a] px-6 py-3 text-sm font-bold uppercase tracking-[0.16em] text-[#381a12] shadow-2xl shadow-black/30 transition-all duration-300 hover:-translate-y-1"
             >
-              Enter the Gallery
-              <span className="transition-transform duration-300 group-hover:translate-x-1">&gt;</span>
+              <span className="relative z-10 flex items-center gap-3">
+                Explore Portfolio
+                <span className="transition-transform duration-300 group-hover:translate-x-1">&gt;</span>
+              </span>
+              
+              {/* Blobs container */}
+              <div className="absolute inset-0 z-0 h-full w-full pointer-events-none" style={{ filter: "url('#goo')" }}>
+                <span className="absolute left-[-10%] top-[120%] h-full w-[35%] rounded-full bg-white transition-transform duration-1000 ease-out group-hover:-translate-y-[160%] scale-[1.7]" style={{ transitionDelay: '0s' }} />
+                <span className="absolute left-[20%] top-[120%] h-full w-[35%] rounded-full bg-white transition-transform duration-1000 ease-out group-hover:-translate-y-[160%] scale-[1.7]" style={{ transitionDelay: '0.15s' }} />
+                <span className="absolute left-[50%] top-[120%] h-full w-[35%] rounded-full bg-white transition-transform duration-1000 ease-out group-hover:-translate-y-[160%] scale-[1.7]" style={{ transitionDelay: '0.3s' }} />
+                <span className="absolute left-[80%] top-[120%] h-full w-[35%] rounded-full bg-white transition-transform duration-1000 ease-out group-hover:-translate-y-[160%] scale-[1.7]" style={{ transitionDelay: '0.45s' }} />
+              </div>
             </Link>
+
+            {/* SVG Filter for Gooey Effect */}
+            <svg style={{ visibility: 'hidden', position: 'absolute', width: 0, height: 0 }} xmlns="http://www.w3.org/2000/svg" version="1.1">
+              <defs>
+                <filter id="goo">
+                  <feGaussianBlur in="SourceGraphic" stdDeviation="10" result="blur" />
+                  <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 19 -9" result="goo" />
+                  <feComposite in="SourceGraphic" in2="goo" operator="atop"/>
+                </filter>
+              </defs>
+            </svg>
           </motion.div>
         </div>
       </section>
 
       <section className="border-y border-[#4b1e12]/10 bg-[#3b170f] py-4 text-[#f7d18a]">
         <div className="marquee-track">
-          {[...services, ...services].map((item, index) => (
-            <span key={`${item}-${index}`} className="mx-8 text-sm font-semibold uppercase tracking-[0.34em]">
+          {Array(10).fill(services).flat().map((item, index) => (
+            <span key={`${item}-${index}`} className="mx-8 whitespace-nowrap text-sm font-semibold uppercase tracking-[0.34em]">
               {item}
             </span>
           ))}
@@ -113,12 +133,11 @@ const Home = () => {
             <div>
               <p className="mb-3 text-sm font-semibold uppercase tracking-[0.34em] text-[#c84624]">Ritual edits</p>
               <h2 className="max-w-3xl font-serif text-5xl font-semibold leading-tight text-[#381a12] dark:text-[#fff4df]">
-                Every ceremony gets its own visual language.
+                Every design deserves its own Personality
               </h2>
             </div>
             <p className="max-w-md text-[#704026] dark:text-[#f5dec2]">
-              We design each event like a chapter: palette, pace, framing, invitation graphics, and film rhythm
-              change with the emotion of the ritual.
+              Every celebration has its own rhythm, character, and charm. Our designs are thoughtfully crafted to bring those moments to life with beauty and purpose..
             </p>
           </motion.div>
 
@@ -160,9 +179,9 @@ const Home = () => {
             viewport={{ once: true, amount: 0.35 }}
             transition={{ duration: 0.8 }}
           >
-            <p className="mb-4 text-sm font-semibold uppercase tracking-[0.34em] text-[#f7d18a]">Signature motion</p>
+            <p className="mb-4 text-sm font-semibold uppercase tracking-[0.34em] text-[#f7d18a]">Signature Designs</p>
             <h2 className="font-serif text-5xl font-semibold leading-tight">
-              Invitations that move before the baraat does.
+              Invitations that begin long before the baraat does.
             </h2>
             <p className="mt-6 max-w-xl leading-relaxed text-[#f5dec2]">
               Animated save-the-dates, story reels, kinetic type, illustrated couple crests, and RSVP flows
@@ -178,16 +197,16 @@ const Home = () => {
             transition={{ duration: 0.8 }}
           >
             <div className="invite-card invite-card-one">
-              <span>Sangeet Night</span>
-              <strong>8:30 PM</strong>
+              <span>Your Story</span>
+              <strong>Invitation Suite</strong>
             </div>
             <div className="invite-card invite-card-two">
-              <span>Phera Ceremony</span>
-              <strong>Under the stars</strong>
+              <span>Wedding Website</span>
+              <strong>One Tap Away</strong>
             </div>
             <div className="invite-card invite-card-three">
               <span>RSVP</span>
-              <strong>Tap to bless</strong>
+              <strong>Save The Date</strong>
             </div>
           </motion.div>
         </div>

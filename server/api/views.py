@@ -177,13 +177,13 @@ class SendEmailView(APIView):
         data = request.data
         name = data.get('name')
         email = data.get('email')
-        event_type = data.get('event_type', '')
+        services_required = data.get('services_required', '')
         
         if not name or not email:
             return Response({"detail": "Name and email are required."}, status=status.HTTP_400_BAD_REQUEST)
             
         subject = "Re: Your Enquiry – Vama Illustrations"
-        message_body = f"Thank you for reaching out to Vama Illustrations. We have received your enquiry{' about ' + event_type if event_type else ''} and will get back to you shortly."
+        message_body = f"Thank you for reaching out to Vama Illustrations. We have received your enquiry{' about ' + services_required if services_required else ''} and will get back to you shortly."
         
         context = {
             'name': name,
@@ -220,11 +220,11 @@ class RenderWhatsAppTemplateView(APIView):
             
         data = request.data
         name = data.get('name', '')
-        event_type = data.get('event_type', '')
+        services_required = data.get('services_required', '')
         
         context = {
             'name': name,
-            'event_type': event_type,
+            'services_required': services_required,
         }
         
         try:

@@ -32,7 +32,7 @@
 .marquee-track {
   display: flex;
   width: max-content;
-  animation: marquee-slide 22s linear infinite;
+  animation: marquee-slide 140s linear infinite;
 }
 
 .invite-card {

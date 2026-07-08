@@ -20,9 +20,11 @@ class GallerySerializer(serializers.ModelSerializer):
 
 class ContactEnquirySerializer(serializers.ModelSerializer):
     """
-    Write: accepts name, email, phone, event_type, message.
+    Write: accepts name, email, phone, services_required, message.
     Read:  returns all fields including status and created_at (admin use).
     """
+    phone = serializers.CharField(required=True, allow_blank=False)
+    services_required = serializers.CharField(required=True, allow_blank=False)
 
     class Meta:
         model = ContactEnquiry
@@ -31,7 +33,7 @@ class ContactEnquirySerializer(serializers.ModelSerializer):
             "name",
             "email",
             "phone",
-            "event_type",
+            "services_required",
             "message",
             "status",
             "created_at",

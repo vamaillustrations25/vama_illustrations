@@ -264,7 +264,7 @@ const AdminDashboard: React.FC = () => {
   const handleSendWhatsApp = async (enq: ContactEnquiry) => {
     try {
       setSendingWhatsApp(enq.id);
-      const { template } = await contactApi.getWhatsAppTemplate({ name: enq.name, event_type: enq.event_type });
+      const { template } = await contactApi.getWhatsAppTemplate({ name: enq.name, services_required: enq.services_required });
       const waUrl = `https://wa.me/${enq.phone.replace(/\D/g, '')}?text=${encodeURIComponent(template)}`;
       window.open(waUrl, "_blank");
     } catch (err: any) {
@@ -280,7 +280,7 @@ const AdminDashboard: React.FC = () => {
       await contactApi.sendEmail({
         name: enq.name,
         email: enq.email,
-        event_type: enq.event_type
+        services_required: enq.services_required
       });
       alert('Email sent successfully!');
     } catch (err: any) {
@@ -614,7 +614,7 @@ const AdminDashboard: React.FC = () => {
                               {/* Enquiry details */}
                               <div className="space-y-2">
                                 <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#8c4b26] dark:text-[#f7d18a]">Enquiry Details</p>
-                                {[['Event Type', enq.event_type || '—'], ['Phone', enq.phone || '—'], ['Submitted', fmtDate(enq.created_at)]].map(([l, v]) => (
+                                {[['Services Required', enq.services_required || '—'], ['Phone', enq.phone || '—'], ['Submitted', fmtDate(enq.created_at)]].map(([l, v]) => (
                                   <div key={l} className="flex gap-2 text-sm"><span className="w-24 shrink-0 font-medium text-[#381a12] dark:text-[#fff4df]">{l}</span><span className="text-[#6f3a24] dark:text-[#f5dec2]">{v}</span></div>
                                 ))}
                                 <div className="mt-1">
@@ -647,7 +647,7 @@ const AdminDashboard: React.FC = () => {
                                 {convertingEnq !== enq.id ? (
                                   <button onClick={() => {
                                       setConvertingEnq(enq.id);
-                                      setNewOrder({ client: enq.name, service: enq.event_type || '', amount: undefined, status: 'under_discussion', date: new Date().toISOString().split('T')[0] });
+                                      setNewOrder({ client: enq.name, service: enq.services_required || '', amount: undefined, status: 'under_discussion', date: new Date().toISOString().split('T')[0] });
                                     }} 
                                     className="mt-1 flex w-full items-center justify-center gap-2 rounded-xl border border-[#c84624]/20 bg-[#c84624]/5 py-2.5 text-sm font-semibold text-[#c84624] transition hover:bg-[#c84624]/10 dark:border-[#f7d18a]/20 dark:bg-[#f7d18a]/5 dark:text-[#f7d18a] dark:hover:bg-[#f7d18a]/10"
                                   >
