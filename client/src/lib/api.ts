@@ -4,7 +4,7 @@
  * Base URL reads from Vite env var, falls back to localhost:8000 for dev.
  */
 
-const BASE_URL = import.meta.env.VITE_API_URL ?? 'http://localhost:8000/api';
+const BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000/api';
 
 // ── Types ────────────────────────────────────────────────────────────────────
 
@@ -90,15 +90,15 @@ export const galleryApi = {
   get: (id: number) => request<Gallery>(`/galleries/${id}/`),
 
   /** Create a new gallery */
-  create: (data: Partial<Gallery>) => 
+  create: (data: Partial<Gallery>) =>
     request<Gallery>('/galleries/', { method: 'POST', body: JSON.stringify(data) }),
 
   /** Update an existing gallery */
-  update: (id: number, data: Partial<Gallery>) => 
+  update: (id: number, data: Partial<Gallery>) =>
     request<Gallery>(`/galleries/${id}/`, { method: 'PATCH', body: JSON.stringify(data) }),
 
   /** Delete a gallery */
-  remove: (id: number) => 
+  remove: (id: number) =>
     request<void>(`/galleries/${id}/`, { method: 'DELETE' }),
 };
 

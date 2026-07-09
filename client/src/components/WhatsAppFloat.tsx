@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from "framer-motion";
 const PHONE = "917506464033";
 const DEFAULT_MESSAGE =
   "Hi Vama Illustration, I would like to enquire more about your services";
-const API_BASE = import.meta.env.VITE_API_URL ?? "http://localhost:8000/api";
+const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:8000/api";
 
 const WhatsAppFloat: React.FC = () => {
   const [ripple, setRipple] = useState(false);
