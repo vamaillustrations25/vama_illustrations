@@ -83,14 +83,18 @@ DATABASES = {
 
 # ── CORS ──────────────────────────────────────────────────────────────────────
 # Allow the Vite dev server and localhost to call the API.
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:5173",
-    "http://127.0.0.1:5173",
-    "http://localhost:3000",
-]
-frontend_url = os.getenv("FRONTEND_URL")
-if frontend_url:
-    CORS_ALLOWED_ORIGINS.append(frontend_url)
+# Comment out or delete the old list:
+# CORS_ALLOWED_ORIGINS = [
+#     "http://localhost:5173",
+#     "http://127.0.0.1:5173",
+#     "http://localhost:3000",
+# ]
+
+# Add this line to allow all origins:
+CORS_ALLOW_ALL_ORIGINS = True
+# frontend_url = os.getenv("FRONTEND_URL")
+# if frontend_url:
+#     CORS_ALLOWED_ORIGINS.append(frontend_url)
 
 CORS_ALLOW_CREDENTIALS = True
 CSRF_TRUSTED_ORIGINS = [
