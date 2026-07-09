@@ -313,6 +313,33 @@ const Collections = () => {
             />
           ))
         )}
+
+        {/* ── Custom Stationery Notice ─────────────────────────────────────────── */}
+        {!loading && galleries.length > 0 && (
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="mx-auto mt-20 max-w-3xl border-t border-[#4b1e12]/10 pt-16 text-center dark:border-[#f7d18a]/10"
+          >
+            <h3 className="font-serif text-2xl font-medium text-[#381a12] dark:text-[#fff4df] sm:text-3xl">
+              Looking for something specific?
+            </h3>
+            <p className="mt-4 text-sm leading-relaxed text-[#5f2b19]/80 dark:text-[#fff8ef]/60 sm:text-base">
+              For E-invites, Wedding Wardrobes, Save the Dates, Wedding Logos &amp; Hashtags —{' '}
+              <a href="https://instagram.com/vamastationery" target="_blank" rel="noreferrer" className="font-semibold text-[#c84624] underline decoration-transparent underline-offset-4 transition-all hover:decoration-[#c84624] dark:text-[#f7d18a] dark:hover:decoration-[#f7d18a]">
+                View our portfolio (Insta)
+              </a>
+              {' '}or{' '}
+              <a href="https://wa.me/917984013401" target="_blank" rel="noreferrer" className="font-semibold text-[#c84624] underline decoration-transparent underline-offset-4 transition-all hover:decoration-[#c84624] dark:text-[#f7d18a] dark:hover:decoration-[#f7d18a]">
+                WhatsApp now
+              </a>.
+            </p>
+            <p className="mt-6 text-xs font-bold uppercase tracking-[0.2em] text-[#8c4b26]/60 dark:text-[#f7d18a]/40">
+              More custom stationery options available on request.
+            </p>
+          </motion.div>
+        )}
       </div>
 
       {/* ── Lightbox Modal ─────────────────────────────────────────────────── */}
