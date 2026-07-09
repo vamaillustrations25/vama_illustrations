@@ -85,12 +85,18 @@ class GalleryDetailView(APIView):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
+from rest_framework.throttling import AnonRateThrottle
+
+class ContactSubmissionThrottle(AnonRateThrottle):
+    rate = '5/hour'
+
 class ContactEnquiryView(APIView):
     """
     POST /api/contact/   — Submit a new enquiry (public, from the Contact form)
     GET  /api/contact/   — List all enquiries (for admin use)
     """
     authentication_classes = [CsrfExemptSessionAuthentication]
+    throttle_classes = [ContactSubmissionThrottle]
 
     def post(self, request):
         serializer = ContactEnquirySerializer(data=request.data)

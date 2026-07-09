@@ -41,14 +41,18 @@ const Home = () => {
 
         <motion.div
           className="mandala-ring left-[6%] top-[18%]"
-          initial={{ opacity: 0, rotate: -40, scale: 0.6 }}
-          animate={{ opacity: 0.75, rotate: 0, scale: 1 }}
-          transition={{ duration: 1.4, delay: 0.4 }}
+          initial={{ opacity: 0, scale: 0.6 }}
+          animate={{ opacity: 0.75, scale: 1, rotate: [0, 360] }}
+          transition={{
+            opacity: { duration: 1.4, delay: 0.4 },
+            scale: { duration: 1.4, delay: 0.4 },
+            rotate: { duration: 35, repeat: Infinity, ease: 'linear' }
+          }}
         />
         <motion.div
           className="mandala-ring right-[8%] top-[54%] h-28 w-28 opacity-60"
-          animate={{ rotate: 360 }}
-          transition={{ duration: 24, repeat: Infinity, ease: 'linear' }}
+          animate={{ rotate: [0, -360] }}
+          transition={{ duration: 40, repeat: Infinity, ease: 'linear' }}
         />
 
         <div className="relative z-10 mx-auto flex min-h-[calc(100vh-74px)] max-w-7xl flex-col justify-end px-4 pb-14 pt-24 sm:px-6 lg:px-8">
@@ -67,7 +71,7 @@ const Home = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, delay: 0.35, ease: [0.16, 1, 0.3, 1] }}
           >
-            A Wedding brand built around “Your Story”.
+            A Wedding brand built around “Your Story”
           </motion.h1>
 
           <motion.div
@@ -87,7 +91,7 @@ const Home = () => {
                 Explore Portfolio
                 <span className="transition-transform duration-300 group-hover:translate-x-1">&gt;</span>
               </span>
-              
+
               {/* Blobs container */}
               <div className="absolute inset-0 z-0 h-full w-full pointer-events-none" style={{ filter: "url('#goo')" }}>
                 <span className="absolute left-[-10%] top-[120%] h-full w-[35%] rounded-full bg-white transition-transform duration-1000 ease-out group-hover:-translate-y-[160%] scale-[1.7]" style={{ transitionDelay: '0s' }} />
@@ -103,7 +107,7 @@ const Home = () => {
                 <filter id="goo">
                   <feGaussianBlur in="SourceGraphic" stdDeviation="10" result="blur" />
                   <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 19 -9" result="goo" />
-                  <feComposite in="SourceGraphic" in2="goo" operator="atop"/>
+                  <feComposite in="SourceGraphic" in2="goo" operator="atop" />
                 </filter>
               </defs>
             </svg>
@@ -131,7 +135,7 @@ const Home = () => {
             transition={{ duration: 0.7 }}
           >
             <div>
-              <p className="mb-3 text-sm font-semibold uppercase tracking-[0.34em] text-[#c84624]">Ritual edits</p>
+              <p className="mb-3 text-sm font-semibold uppercase tracking-[0.34em] text-[#c84624]">Timeless Stationery</p>
               <h2 className="max-w-3xl font-serif text-5xl font-semibold leading-tight text-[#381a12] dark:text-[#fff4df]">
                 Every design deserves its own Personality
               </h2>

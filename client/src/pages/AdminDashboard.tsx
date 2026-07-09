@@ -37,6 +37,20 @@ const TABS = [
   { id: 'settings', label: 'Settings', icon: 'M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.324.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 011.37.49l1.296 2.247a1.125 1.125 0 01-.26 1.431l-1.003.827c-.293.24-.438.613-.431.992a6.759 6.759 0 010 .255c-.007.378.138.75.43.99l1.005.828c.424.35.534.954.26 1.43l-1.298 2.247a1.125 1.125 0 01-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.57 6.57 0 01-.22.128c-.331.183-.581.495-.644.869l-.213 1.28c-.09.543-.56.941-1.11.941h-2.594c-.55 0-1.02-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 01-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 01-1.369-.49l-1.297-2.247a1.125 1.125 0 01.26-1.431l1.004-.827c.292-.24.437-.613.43-.992a6.932 6.932 0 010-.255c.007-.378-.138-.75-.43-.99l-1.004-.828a1.125 1.125 0 01-.26-1.43l1.297-2.247a1.125 1.125 0 011.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.087.22-.128.332-.183.582-.495.644-.869l.214-1.281z M15 12a3 3 0 11-6 0 3 3 0 016 0z' },
 ];
 
+const GALLERY_CATEGORIES: Record<string, string[]> = {
+  'Wedding Keepsakes': ['Printed Invites', 'Wedding Newspaper', 'Wedding Magazine', 'Mini Book (Digital/Handmade)', 'Wedding Planner / Wedding Diary'],
+  'Welcome & Guest Arrival': ['Welcome Note', 'Key Card Holder Itinerary', 'Event Itinerary', 'Passport Itinerary', 'Ritual Card', 'Tent Cards'],
+  'Wedding Decor': ['Welcome Boards', 'Resin Welcome Boards', 'Fun Signs & Funky Boards', 'Puzzle Boards'],
+  'Dining & Reception Essentials': ['Menu Card', 'Popcorn Tubes', 'Straws Topper', 'Cake Topper'],
+  'Wedding Favors & Guest Gifts': ['Envelopes', 'Thank You Card', 'Resin Initial Keychain', 'Badges', 'Magnets', 'Chocolate Wrapper with Logo'],
+  'Baarat / Pheras Accessories': ['Petal Cones', 'Wedding Bands', 'Wedding Currency', 'Wedding Bells'],
+  'Games & Entertainment': ['Tambola Tickets', 'Scratch Cards', 'Wedding Contract'],
+  'Logo Essentials': ['Logo Stickers', 'Car Stickers', 'Paper Bags with Logo', 'Jute Bags with Logo'],
+  'Other Essentials': ['Luggage Tags', 'Resin Varmala Preservation', 'Hangover Kits'],
+};
+
+const GALLERY_TITLE_OPTIONS = Object.keys(GALLERY_CATEGORIES).map(t => ({ label: t, value: t }));
+
 
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
@@ -200,17 +214,17 @@ const PieChart = ({ data }: { data: { label: string; value: number; color: strin
         const sliceAngle = (d.value / total) * 360;
         if (sliceAngle === 0) return null;
         if (sliceAngle === 360) return <circle key={i} r="16" cx="16" cy="16" fill={d.color} />;
-        
+
         const startX = 16 + 16 * Math.cos((Math.PI * currentAngle) / 180);
         const startY = 16 + 16 * Math.sin((Math.PI * currentAngle) / 180);
-        
+
         currentAngle += sliceAngle;
-        
+
         const endX = 16 + 16 * Math.cos((Math.PI * currentAngle) / 180);
         const endY = 16 + 16 * Math.sin((Math.PI * currentAngle) / 180);
-        
+
         const largeArcFlag = sliceAngle > 180 ? 1 : 0;
-        
+
         return (
           <path
             key={i}
@@ -300,7 +314,7 @@ const AdminDashboard: React.FC = () => {
   const [newNote, setNewNote] = useState('');
 
   // ── Settings state
-  const [settings, setSettings] = useState({ studioName: 'Vama Illustrations', email: 'vanshim351@gmail.com' });
+  const [settings, setSettings] = useState({ studioName: 'Vama Illustrations', email: 'vamaillustrations@gmail.com' });
   const [saved, setSaved] = useState(false);
 
   // ── Fetch enquiries when tab activates
@@ -315,7 +329,7 @@ const AdminDashboard: React.FC = () => {
       setGalLoading(true);
       galleryApi.list()
         .then(data => setGalleries(data))
-        .catch(() => {})
+        .catch(() => { })
         .finally(() => setGalLoading(false));
     }
   }, [activeTab]);
@@ -344,10 +358,10 @@ const AdminDashboard: React.FC = () => {
     if (!e.target.files || e.target.files.length === 0) return;
     const file = e.target.files[0];
     setUploadingGalImg(true);
-    
+
     const fileExt = file.name.split('.').pop();
     const fileName = `${Math.random().toString(36).substring(2, 15)}_${Date.now()}.${fileExt}`;
-    
+
     try {
       const { error: uploadError } = await supabase.storage.from('galleries').upload(fileName, file);
       if (uploadError) {
@@ -358,7 +372,7 @@ const AdminDashboard: React.FC = () => {
         }
         return;
       }
-      
+
       const { data } = supabase.storage.from('galleries').getPublicUrl(fileName);
       if (data) {
         setEditingGal(prev => ({ ...prev, image_url: data.publicUrl }));
@@ -508,7 +522,15 @@ const AdminDashboard: React.FC = () => {
                   </button>
                 </motion.div>
                 <motion.div variants={stagger} className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
-                  {galLoading && <p className="text-sm text-[#6f3a24] dark:text-[#f5dec2]">Loading galleries...</p>}
+                  {galLoading && Array.from({ length: 6 }).map((_, i) => (
+                    <div key={i} className="group relative overflow-hidden rounded-[1.75rem] border border-[#4b1e12]/10 bg-[#4b1e12]/5 dark:border-[#f7d18a]/10 dark:bg-white/5 animate-pulse">
+                      <div className="relative h-44 bg-[#4b1e12]/10 dark:bg-white/10" />
+                      <div className="p-4 space-y-3">
+                        <div className="h-5 w-3/4 rounded bg-[#4b1e12]/10 dark:bg-white/10" />
+                        <div className="h-4 w-1/3 rounded-full bg-[#4b1e12]/10 dark:bg-white/10" />
+                      </div>
+                    </div>
+                  ))}
                   {!galLoading && galleries.map(item => (
                     <motion.div key={item.id} variants={fadeUp} whileHover={{ y: -6 }}
                       className="group relative overflow-hidden rounded-[1.75rem] border border-[#4b1e12]/10 bg-white shadow-sm dark:border-[#f7d18a]/10 dark:bg-white/5">
@@ -574,24 +596,24 @@ const AdminDashboard: React.FC = () => {
                         )}
                         {/* Actions */}
                         <div className="flex gap-2">
-                          <button 
+                          <button
                             onClick={() => handleSendEmail(enq)}
                             disabled={sendingEmail === enq.id}
-                            className={`grid h-8 w-8 place-items-center rounded-xl border border-[#4b1e12]/15 text-[#8c4b26] transition hover:bg-[#f6dfbd] dark:border-[#f7d18a]/20 dark:text-[#f7d18a] dark:hover:bg-white/10 ${sendingEmail === enq.id ? 'opacity-50 cursor-wait' : ''}`} 
+                            className={`grid h-8 w-8 place-items-center rounded-xl border border-[#4b1e12]/15 text-[#8c4b26] transition hover:bg-[#f6dfbd] dark:border-[#f7d18a]/20 dark:text-[#f7d18a] dark:hover:bg-white/10 ${sendingEmail === enq.id ? 'opacity-50 cursor-wait' : ''}`}
                             title="Send Email">
                             {sendingEmail === enq.id ? (
-                              <svg className="h-4 w-4 animate-spin" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round"><path d="M21 12a9 9 0 11-6.219-8.56"/></svg>
+                              <svg className="h-4 w-4 animate-spin" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round"><path d="M21 12a9 9 0 11-6.219-8.56" /></svg>
                             ) : (
                               <svg className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" /></svg>
                             )}
                           </button>
-                          <button 
+                          <button
                             onClick={() => handleSendWhatsApp(enq)}
                             disabled={sendingWhatsApp === enq.id}
-                            className={`grid h-8 w-8 place-items-center rounded-xl border border-emerald-500/30 bg-emerald-500/10 text-emerald-400 transition hover:bg-emerald-500/20 ${sendingWhatsApp === enq.id ? 'opacity-50 cursor-wait' : ''}`} 
+                            className={`grid h-8 w-8 place-items-center rounded-xl border border-emerald-500/30 bg-emerald-500/10 text-emerald-400 transition hover:bg-emerald-500/20 ${sendingWhatsApp === enq.id ? 'opacity-50 cursor-wait' : ''}`}
                             title="Send WhatsApp">
                             {sendingWhatsApp === enq.id ? (
-                              <svg className="h-4 w-4 animate-spin" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round"><path d="M21 12a9 9 0 11-6.219-8.56"/></svg>
+                              <svg className="h-4 w-4 animate-spin" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round"><path d="M21 12a9 9 0 11-6.219-8.56" /></svg>
                             ) : (
                               <svg className="h-4 w-4" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z M12 0C5.373 0 0 5.373 0 12c0 2.126.553 4.116 1.524 5.843L.058 23.998l6.335-1.457C8.084 23.476 10.002 24 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.869 0-3.632-.48-5.164-1.332l-.37-.22-3.76.865.942-3.67-.24-.383A9.934 9.934 0 012 12c0-5.514 4.486-10 10-10s10 4.486 10 10-4.486 10-10 10z" /></svg>
                             )}
@@ -646,9 +668,9 @@ const AdminDashboard: React.FC = () => {
 
                                 {convertingEnq !== enq.id ? (
                                   <button onClick={() => {
-                                      setConvertingEnq(enq.id);
-                                      setNewOrder({ client: enq.name, service: enq.services_required || '', amount: undefined, status: 'under_discussion', date: new Date().toISOString().split('T')[0] });
-                                    }} 
+                                    setConvertingEnq(enq.id);
+                                    setNewOrder({ client: enq.name, email: enq.email, phone: enq.phone, service: enq.services_required || '', amount: undefined, status: 'under_discussion', date: new Date().toISOString().split('T')[0] });
+                                  }}
                                     className="mt-1 flex w-full items-center justify-center gap-2 rounded-xl border border-[#c84624]/20 bg-[#c84624]/5 py-2.5 text-sm font-semibold text-[#c84624] transition hover:bg-[#c84624]/10 dark:border-[#f7d18a]/20 dark:bg-[#f7d18a]/5 dark:text-[#f7d18a] dark:hover:bg-[#f7d18a]/10"
                                   >
                                     Move to orders
@@ -733,8 +755,10 @@ const AdminDashboard: React.FC = () => {
                 {/* Add order */}
                 <motion.div variants={fadeUp} className="relative z-20 rounded-[1.5rem] border border-[#4b1e12]/10 bg-white/80 p-5 shadow-sm backdrop-blur dark:border-[#f7d18a]/10 dark:bg-white/5">
                   <p className="mb-4 text-sm font-bold text-[#381a12] dark:text-[#fff4df]">Add Order / Project</p>
-                  <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
+                  <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-7">
                     <input placeholder="Client name" value={newOrder.client ?? ''} onChange={e => setNewOrder(p => ({ ...p, client: e.target.value }))} className={inp} />
+                    <input placeholder="Email (optional)" type="email" value={newOrder.email ?? ''} onChange={e => setNewOrder(p => ({ ...p, email: e.target.value }))} className={inp} />
+                    <input placeholder="Phone (optional)" type="tel" value={newOrder.phone ?? ''} onChange={e => setNewOrder(p => ({ ...p, phone: e.target.value }))} className={inp} />
                     <input placeholder="Service / project" value={newOrder.service ?? ''} onChange={e => setNewOrder(p => ({ ...p, service: e.target.value }))} className={inp} />
                     <input type="number" placeholder="Amount ₹" value={newOrder.amount ?? ''} onChange={e => setNewOrder(p => ({ ...p, amount: Number(e.target.value) }))} className={inp} />
                     <CustomSelect
@@ -781,7 +805,7 @@ const AdminDashboard: React.FC = () => {
                                 />
                               </td>
                               <td className="px-5 py-3 text-right">
-                                <button onClick={() => setOrders(prev => prev.filter(x => x.id !== o.id))} 
+                                <button onClick={() => setOrders(prev => prev.filter(x => x.id !== o.id))}
                                   className="p-1 text-[#c84624] transition hover:text-[#9f2f18] dark:hover:text-[#f7d18a]" title="Remove Order">
                                   <svg className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
                                     <path strokeLinecap="round" strokeLinejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
@@ -824,7 +848,7 @@ const AdminDashboard: React.FC = () => {
                             className="absolute right-3 top-3 grid h-7 w-7 place-items-center rounded-full bg-[#c84624]/10 text-[#c84624] transition hover:bg-[#c84624]/20" title="Delete Note">
                             <svg className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" /></svg>
                           </button>
-                          <textarea 
+                          <textarea
                             value={note.content}
                             onChange={e => setNotes(prev => prev.map(n => n.id === note.id ? { ...n, content: e.target.value } : n))}
                             className="mt-6 w-full resize-none bg-transparent p-0 font-serif text-sm font-medium text-[#381a12] outline-none placeholder:text-[#381a12]/30 dark:text-[#fff4df] dark:placeholder:text-[#fff4df]/30"
@@ -909,7 +933,7 @@ const AdminDashboard: React.FC = () => {
                 </button>
               </div>
               <form onSubmit={handleSaveGallery} className="p-6 flex flex-col md:flex-row gap-8">
-                
+
                 {/* Left side: Image Upload & Preview */}
                 <div className="w-full md:w-1/2 flex flex-col">
                   <label className="mb-2 block text-xs font-semibold uppercase tracking-wider text-[#8c4b26] dark:text-[#f7d18a]/70">Image</label>
@@ -934,13 +958,27 @@ const AdminDashboard: React.FC = () => {
                 <div className="w-full md:w-1/2 flex flex-col space-y-4">
                   <div>
                     <label className="mb-1 block text-xs font-semibold uppercase tracking-wider text-[#8c4b26] dark:text-[#f7d18a]/70">Title</label>
-                    <input type="text" required value={editingGal?.title || ''} onChange={e => setEditingGal({ ...editingGal, title: e.target.value })}
-                      className="w-full rounded-xl border border-[#4b1e12]/20 bg-white/50 px-4 py-2.5 text-sm text-[#381a12] outline-none transition focus:border-[#c84624] focus:ring-2 focus:ring-[#c84624]/20 dark:border-[#f7d18a]/20 dark:bg-black/20 dark:text-[#fff4df]" />
+                    <CustomSelect
+                      value={editingGal?.title || ''}
+                      onChange={(val) => {
+                        setEditingGal({ ...editingGal, title: val, tag: '' });
+                      }}
+                      options={GALLERY_TITLE_OPTIONS}
+                      placeholder="Select a category…"
+                    />
                   </div>
                   <div>
-                    <label className="mb-1 block text-xs font-semibold uppercase tracking-wider text-[#8c4b26] dark:text-[#f7d18a]/70">Tag (e.g. Photography)</label>
-                    <input type="text" required value={editingGal?.tag || ''} onChange={e => setEditingGal({ ...editingGal, tag: e.target.value })}
-                      className="w-full rounded-xl border border-[#4b1e12]/20 bg-white/50 px-4 py-2.5 text-sm text-[#381a12] outline-none transition focus:border-[#c84624] focus:ring-2 focus:ring-[#c84624]/20 dark:border-[#f7d18a]/20 dark:bg-black/20 dark:text-[#fff4df]" />
+                    <label className="mb-1 block text-xs font-semibold uppercase tracking-wider text-[#8c4b26] dark:text-[#f7d18a]/70">Tag</label>
+                    <CustomSelect
+                      value={editingGal?.tag || ''}
+                      onChange={(val) => setEditingGal({ ...editingGal, tag: val })}
+                      options={
+                        editingGal?.title && GALLERY_CATEGORIES[editingGal.title]
+                          ? GALLERY_CATEGORIES[editingGal.title].map(t => ({ label: t, value: t }))
+                          : []
+                      }
+                      placeholder={editingGal?.title ? 'Select a tag…' : 'Select a title first'}
+                    />
                   </div>
                   <div>
                     <label className="mb-1 block text-xs font-semibold uppercase tracking-wider text-[#8c4b26] dark:text-[#f7d18a]/70">Description</label>
@@ -952,7 +990,7 @@ const AdminDashboard: React.FC = () => {
                       className="rounded border-[#4b1e12]/30 text-[#c84624] focus:ring-[#c84624]" />
                     <span className="text-sm text-[#6f3a24] dark:text-[#f5dec2]">Featured Gallery</span>
                   </label>
-                  
+
                   <div className="mt-4 border-t border-[#4b1e12]/10 pt-4 dark:border-[#f7d18a]/10">
                     <label className="mb-2 block text-xs font-semibold uppercase tracking-wider text-[#8c4b26] dark:text-[#f7d18a]/70">Recommendations (Max 3)</label>
                     <div className="max-h-32 overflow-y-auto space-y-2 rounded-xl border border-[#4b1e12]/20 bg-white/30 p-3 dark:border-[#f7d18a]/20 dark:bg-black/20">
@@ -960,8 +998,8 @@ const AdminDashboard: React.FC = () => {
                         const isSelected = editingGal?.recommendations?.includes(g.id);
                         return (
                           <label key={g.id} className="flex items-center gap-2 cursor-pointer text-sm text-[#6f3a24] dark:text-[#f5dec2]">
-                            <input 
-                              type="checkbox" 
+                            <input
+                              type="checkbox"
                               checked={isSelected || false}
                               onChange={e => {
                                 const currentRecs = editingGal?.recommendations || [];
@@ -975,9 +1013,9 @@ const AdminDashboard: React.FC = () => {
                                   setEditingGal({ ...editingGal, recommendations: currentRecs.filter(id => id !== g.id) });
                                 }
                               }}
-                              className="rounded border-[#4b1e12]/30 text-[#c84624] focus:ring-[#c84624]" 
+                              className="rounded border-[#4b1e12]/30 text-[#c84624] focus:ring-[#c84624]"
                             />
-                            {g.title}
+                            {g.tag}
                           </label>
                         );
                       })}
@@ -987,15 +1025,15 @@ const AdminDashboard: React.FC = () => {
                     </div>
                   </div>
                   <div className="mt-auto pt-8 flex gap-3">
-                  <button type="button" onClick={() => setIsGalModalOpen(false)}
-                    className="flex-1 rounded-xl bg-[#4b1e12]/10 py-3 text-sm font-semibold text-[#6f3a24] transition hover:bg-[#4b1e12]/15 dark:bg-[#f7d18a]/10 dark:text-[#f7d18a] dark:hover:bg-[#f7d18a]/20">
-                    Cancel
-                  </button>
-                  <button type="submit" disabled={uploadingGalImg}
-                    className="flex-1 rounded-xl bg-[#c84624] py-3 text-sm font-semibold text-white shadow-lg shadow-[#c84624]/25 transition hover:-translate-y-0.5 hover:bg-[#9f2f18] disabled:opacity-50 disabled:hover:translate-y-0">
-                    {uploadingGalImg ? 'Uploading Image...' : 'Save Gallery'}
-                  </button>
-                </div>
+                    <button type="button" onClick={() => setIsGalModalOpen(false)}
+                      className="flex-1 rounded-xl bg-[#4b1e12]/10 py-3 text-sm font-semibold text-[#6f3a24] transition hover:bg-[#4b1e12]/15 dark:bg-[#f7d18a]/10 dark:text-[#f7d18a] dark:hover:bg-[#f7d18a]/20">
+                      Cancel
+                    </button>
+                    <button type="submit" disabled={uploadingGalImg}
+                      className="flex-1 rounded-xl bg-[#c84624] py-3 text-sm font-semibold text-white shadow-lg shadow-[#c84624]/25 transition hover:-translate-y-0.5 hover:bg-[#9f2f18] disabled:opacity-50 disabled:hover:translate-y-0">
+                      {uploadingGalImg ? 'Uploading Image...' : 'Save Gallery'}
+                    </button>
+                  </div>
                 </div>
               </form>
             </motion.div>
