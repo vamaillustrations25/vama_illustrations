@@ -2,15 +2,16 @@ import os
 import sys
 from django.core.wsgi import get_wsgi_application
 
-# 1. Locate the 'server' directory relative to this file
+# Locate the 'server' directory relative to this file
 current_dir = os.path.dirname(__file__)
 server_path = os.path.abspath(os.path.join(current_dir, '..', 'server'))
 
-# 2. Inject it into Python's path so Vercel can see your apps
-sys.path.append(server_path)
+# Inject server path into Python's environment path list
+if server_path not in sys.path:
+    sys.path.append(server_path)
 
-# 3. Tell Django where your settings module lives
+# Point to your Django core settings module
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'core.settings')
 
-# 4. Expose the WSGI application for Vercel
+# Expose WSGI application handler for Vercel
 app = get_wsgi_application()

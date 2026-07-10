@@ -1,47 +1,42 @@
 """
 Django settings for core project — Vama Illustrations Backend.
-Lightweight, API-only configuration connected to Supabase (PostgreSQL).
+Production-optimized, API-only configuration connected to Supabase (PostgreSQL) on Vercel.
 """
 
-from pathlib import Path
 import os
+from pathlib import Path
 import dj_database_url
 from dotenv import load_dotenv
 
-
-# Load environment variables from .env
+# Load local environment variables if present (ignored automatically in Vercel production)
 load_dotenv(override=True)
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# ── Security ──────────────────────────────────────────────────────────────────
-SECRET_KEY = os.getenv("SECRET_KEY", "django-insecure-change-me-in-production")
-DEBUG = os.getenv("DEBUG", "True") == "True"
-ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "localhost,127.0.0.1").split(",")
+# ── Security Configuration ──────────────────────────────────────────────────
+SECRET_KEY = os.environ.get("SECRET_KEY", "django-insecure-change-me-in-production")
+DEBUG = os.environ.get("DEBUG", "False") == "True"
 
-# ── Applications ──────────────────────────────────────────────────────────────
-# Stripped to the minimum needed for an API-only backend.
+# Allow all routing hosts globally on Vercel serverless gateways
+ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS", "*").split(",")
+
+# ── Application Definition ────────────────────────────────────────────────────
 INSTALLED_APPS = [
-    'corsheaders',
-    # Django admin
+    "corsheaders",  # Core cross-origin handler must load early
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    # Third-party
     "rest_framework",
-    # Local
     "api",
 ]
 
-# ── Middleware ─────────────────────────────────────────────────────────────────
-# CORS must come before CommonMiddleware.
 MIDDLEWARE = [
-    'corsheaders.middleware.CorsMiddleware',
-    'django.middleware.security.SecurityMiddleware',
-    "whitenoise.middleware.WhiteNoiseMiddleware",
+    "corsheaders.middleware.CorsMiddleware",  # Must be the absolute first item
+    "django.middleware.security.SecurityMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",  # Manages static files safely on serverless architectures
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -67,41 +62,35 @@ TEMPLATES = [
     },
 ]
 
-STATIC_URL = "static/"
-STATIC_ROOT = BASE_DIR / "staticfiles"
-STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
-
 WSGI_APPLICATION = "core.wsgi.application"
 
-# ── Database — Supabase (PostgreSQL) ─────────────────────────────────────────
+# ── Database — Supabase (PostgreSQL) ──────────────────────────────────────────
+# Dynamically configures production PostgreSQL via environment variables, falling back to SQLite locally.
 DATABASES = {
     "default": dj_database_url.config(
-        default=os.getenv("DATABASE_URL", "sqlite:///db.sqlite3"),
-        conn_max_age=600,
-        conn_health_checks=True,
+        default=os.environ.get("DATABASE_URL", "sqlite:///db.sqlite3"),
+        conn_max_age=0,  # Set to 0 because Serverless pipelines instantiate single-use short connections
+        ssl_require=True if os.environ.get("DATABASE_URL") else False,
     )
 }
 
-# ── CORS ──────────────────────────────────────────────────────────────────────
-# Allow the Vite dev server and localhost to call the API.
-# Comment out or delete the old list:
-# CORS_ALLOWED_ORIGINS = [
-#     "http://localhost:5173",
-#     "http://127.0.0.1:5173",
-#     "http://localhost:3000",
-# ]
+# ── Static Assets ─────────────────────────────────────────────────────────────
+STATIC_URL = "static/"
+STATIC_ROOT = BASE_DIR / "staticfiles"
 
-# Add this line to allow all origins:
+# Using standard CompressedStorage prevents Vercel from throwing "missing manifest" errors on its read-only disk
+STATICFILES_STORAGE = "whitenoise.storage.CompressedStaticFilesStorage"
+
+# ── CORS & CSRF Security Rules ────────────────────────────────────────────────
 CORS_ALLOW_ALL_ORIGINS = True
-# frontend_url = os.getenv("FRONTEND_URL")
-# if frontend_url:
-#     CORS_ALLOWED_ORIGINS.append(frontend_url)
-
 CORS_ALLOW_CREDENTIALS = True
+
+# Explicitly trust your Vite production and local frontend URLs to pass cross-site state requests safely
 CSRF_TRUSTED_ORIGINS = [
     "http://localhost:5173",
     "http://127.0.0.1:5173",
     "http://localhost:3000",
+    "https://vamaillustrations.vercel.app",  # Your production client app domain
 ]
 
 # ── Django REST Framework ─────────────────────────────────────────────────────
@@ -120,29 +109,19 @@ REST_FRAMEWORK = {
     },
 }
 
-# ── Internationalisation ──────────────────────────────────────────────────────
+# ── Internationalization ──────────────────────────────────────────────────────
 LANGUAGE_CODE = "en-us"
 TIME_ZONE = "Asia/Kolkata"
 USE_I18N = False
 USE_TZ = True
 
-# ── Misc ──────────────────────────────────────────────────────────────────────
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-# ── Email Settings ────────────────────────────────────────────────────────────
+# ── Email Settings (SMTP Configuration) ───────────────────────────────────────
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
-EMAIL_HOST = os.getenv("EMAIL_HOST", "smtp.gmail.com")
-EMAIL_PORT = int(os.getenv("EMAIL_PORT", 587))
-EMAIL_USE_TLS = os.getenv("EMAIL_USE_TLS", "True") == "True"
-EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER", "")
-EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD", "")
-DEFAULT_FROM_EMAIL = os.getenv("DEFAULT_FROM_EMAIL", EMAIL_HOST_USER)
-
-# Force server reload for .env changes
-import os
-
-# Read the ALLOWED_HOSTS from Vercel environment variables safely
-ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS", "*").split(",")
-
-CORS_ALLOW_ALL_ORIGINS = True
-CORS_ALLOW_CREDENTIALS = True
+EMAIL_HOST = os.environ.get("EMAIL_HOST", "smtp.gmail.com")
+EMAIL_PORT = int(os.environ.get("EMAIL_PORT", 587))
+EMAIL_USE_TLS = os.environ.get("EMAIL_USE_TLS", "True") == "True"
+EMAIL_HOST_USER = os.environ.get("EMAIL_HOST_USER", "")
+EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD", "")
+DEFAULT_FROM_EMAIL = os.environ.get("DEFAULT_FROM_EMAIL", EMAIL_HOST_USER)
