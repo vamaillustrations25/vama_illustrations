@@ -85,7 +85,6 @@ class GalleryDetailView(APIView):
         gallery.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
-
 class ContactSubmissionThrottle(AnonRateThrottle):
     rate = '5/hour'
 

@@ -56,6 +56,13 @@ const ImageCard = ({
         onLoad={(e) => e.currentTarget.classList.add('loaded')}
       />
 
+      {/* Featured Ribbon */}
+      {item.is_featured && (
+        <div className="absolute -left-[45px] top-[24px] z-10 w-[170px] -rotate-45 bg-[#f7d18a] py-1 text-center text-[10px] font-bold uppercase tracking-[0.2em] text-[#381a12] shadow-md">
+          Featured
+        </div>
+      )}
+
       {/* Always-visible gradient at bottom */}
       <div className="absolute inset-0 bg-gradient-to-t from-[#160604]/80 via-transparent to-transparent transition-opacity duration-300 group-hover:from-[#160604]/90" />
 
@@ -368,7 +375,12 @@ const Collections = () => {
               </button>
 
               {/* Main Image */}
-              <div className="relative h-1/2 w-full shrink-0 bg-black lg:h-full lg:w-1/2">
+              <div className="relative h-1/2 w-full shrink-0 overflow-hidden bg-black lg:h-full lg:w-1/2">
+                {selectedGallery.is_featured && (
+                  <div className="absolute -left-[45px] top-[24px] z-10 w-[170px] -rotate-45 bg-[#f7d18a] py-1 text-center text-[10px] font-bold uppercase tracking-[0.2em] text-[#381a12] shadow-md">
+                    Featured
+                  </div>
+                )}
                 <img
                   src={selectedGallery.image_url}
                   alt={selectedGallery.tag}
@@ -377,7 +389,7 @@ const Collections = () => {
               </div>
 
               {/* Details & Related */}
-              <div className="flex h-1/2 w-full flex-col overflow-y-auto p-6 sm:p-8 lg:h-full lg:w-1/2 lg:overflow-visible lg:p-14">
+              <div className="flex h-1/2 w-full flex-col overflow-y-auto p-6 sm:p-8 lg:h-full lg:w-1/2 lg:overflow-y-auto lg:p-14">
                 <div className="flex flex-col gap-4 lg:gap-6">
                   <div>
                     <span className="mb-4 inline-block text-xs font-bold uppercase tracking-[0.2em] text-[#c84624]">
@@ -386,7 +398,7 @@ const Collections = () => {
                     <h3 className="font-serif text-3xl font-semibold text-[#381a12] dark:text-[#fff8ef] xl:text-4xl">
                       {selectedGallery.tag}
                     </h3>
-                    <p className="mt-4 text-sm leading-relaxed text-[#5f2b19] dark:text-[#ffe9c2]/70 xl:text-base">
+                    <p className="mt-4 whitespace-pre-wrap text-sm leading-relaxed text-[#5f2b19] dark:text-[#ffe9c2]/70 xl:text-base">
                       {selectedGallery.description || "A glimpse into our crafted visuals. This collection encapsulates our signature warm and cinematic aesthetic. Every moment is captured with meticulous attention to detail."}
                     </p>
                   </div>
