@@ -29,7 +29,7 @@ A full-stack portfolio and business management web application built for an Indi
 
 ### Backend
 - **Django** & **Django REST Framework (DRF)**
-- **SQLite3** (Database)
+- **Supabase (PostgreSQL) and SQLite3** (Database)
 - **SMTP** (For automated email sending)
 
 ## 🚀 Local Development Setup
